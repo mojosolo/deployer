@@ -12,6 +12,7 @@ namespace Deployer;
 
 use Deployer\Collection\Collection;
 use Deployer\Command\BlackjackCommand;
+use Deployer\Command\CheckersCommand;
 use Deployer\Command\ConfigCommand;
 use Deployer\Command\InitCommand;
 use Deployer\Command\MainCommand;
@@ -190,6 +191,7 @@ class Deployer extends Container
     public function init(): void
     {
         $this->addTaskCommands();
+        $this->getConsole()->add(new CheckersCommand());
         $this->getConsole()->add(new BlackjackCommand());
         $this->getConsole()->add(new ConfigCommand($this));
         $this->getConsole()->add(new WorkerCommand($this));
