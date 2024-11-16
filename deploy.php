@@ -4,19 +4,43 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 // Config
+set('repository', 'YOUR_REPOSITORY_URL');
+set('application', 'larryville');
+set('keep_releases', 5);
 
-set('repository', 'https://github.com/deployphp/deployer.git');
+// Shared files/dirs between deploys 
+add('shared_files', [
+    '.env'
+]);
 
-add('shared_files', []);
-add('shared_dirs', []);
-add('writable_dirs', []);
+add('shared_dirs', [
+    'storage',
+    'bootstrap/cache',
+]);
+
+// Writable dirs by web server 
+add('writable_dirs', [
+    'bootstrap/cache',
+    'storage',
+    'storage/app',
+    'storage/app/public',
+    'storage/framework',
+    'storage/framework/cache',
+    'storage/framework/sessions',
+    'storage/framework/views',
+    'storage/logs',
+]);
 
 // Hosts
+host('your-server.com')
+    ->set('remote_user', 'your-ssh-user')
+    ->set('deploy_path', '/var/www/larryville');
 
-host('3000')
-    ->set('remote_user', 'deployer')
-    ->set('deploy_path', '~/larryville');
-
-// Hooks
+// Tasks
+task('build', function () {
+    cd('{{release_path}}');
+    run('npm install');
+    run('npm run build');
+});
 
 after('deploy:failed', 'deploy:unlock');
