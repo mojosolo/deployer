@@ -4,13 +4,13 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 // Config
-set('repository', 'https://github.com/mojosolo/larryville.git');
+set('repository', 'https://YOUR_GITHUB_TOKEN@github.com/mojosolo/larryville.git');
 set('application', 'larryville');
 set('keep_releases', 5);
 
-// Authentication for private repository
-set('git_tty', true);
-set('git_ssh_command', 'ssh -o StrictHostKeyChecking=accept-new');
+// Git configuration
+set('git_tty', false);
+set('git_cache', false);
 
 // Shared files/dirs between deploys 
 add('shared_files', [
@@ -38,7 +38,7 @@ add('writable_dirs', [
 // Hosts
 host('localhost')
     ->set('remote_user', get_current_user())
-    ->set('deploy_path', '/var/www/larryville')
+    ->set('deploy_path', '/Users/david/Herd/larryville')
     ->set('writable_mode', 'chmod')
     ->set('writable_chmod_mode', '0755')
     ->set('writable_chmod_recursive', true);
