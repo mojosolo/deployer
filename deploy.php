@@ -4,9 +4,13 @@ namespace Deployer;
 require 'recipe/laravel.php';
 
 // Config
-set('repository', 'YOUR_REPOSITORY_URL');
+set('repository', 'https://github.com/mojosolo/larryville.git');
 set('application', 'larryville');
 set('keep_releases', 5);
+
+// Authentication for private repository
+set('git_tty', true);
+set('git_ssh_command', 'ssh -o StrictHostKeyChecking=accept-new');
 
 // Shared files/dirs between deploys 
 add('shared_files', [
@@ -32,9 +36,12 @@ add('writable_dirs', [
 ]);
 
 // Hosts
-host('your-server.com')
-    ->set('remote_user', 'your-ssh-user')
-    ->set('deploy_path', '/var/www/larryville');
+host('localhost')
+    ->set('remote_user', get_current_user())
+    ->set('deploy_path', '/var/www/larryville')
+    ->set('writable_mode', 'chmod')
+    ->set('writable_chmod_mode', '0755')
+    ->set('writable_chmod_recursive', true);
 
 // Tasks
 task('build', function () {
